@@ -20,6 +20,7 @@
 
  // hard code data for now
  const users = [
+    { id: '2', firstName: 'OREN-ISHI', age: 30},
     { id: '23', firstName: 'Bill', age: 20},
     { id: '47', firstName: 'Samantha', age: 21}
  ]
@@ -38,6 +39,8 @@
             // and it finds the data
             resolve(parentValue, args){ // parentValue is something that is not going to be used
               return _.find(users, {id: args.id}) // lodash search all users and return the user with id which is the passed id
+              // This is raw Javascript object, we don't have to define type here.
+              // GraphQL handles the type automatically for us
             }
         }
     }
