@@ -14,4 +14,23 @@
         firstName:{type: GraphQLString},
         age: {type: GraphQLInt},
     }
+ });
+
+ const RootQuery = new GraphQLObjectType({
+    // translate: you can give root query asking about users, 
+    // if you give me the id which is of GraphQLString that you are looking for,
+    // i (graphQL) will return a UserType object back to you
+    name: 'RootQueryType',
+    fields: {
+        user: {
+            type: UserType,
+            args: { id: {type: GraphQLString }},
+            // resolve function is the key piece:
+            // the resolve function will actually go into the Data Store / Database, 
+            // and it finds the data
+            resolve(parentValue, args){ // parentValue is something that is not going to be used
+                // TODO
+            }
+        }
+    }
  })
