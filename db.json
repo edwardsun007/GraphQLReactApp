@@ -1,8 +1,12 @@
 {
     "users": [
-        { "id": "1", "firstName": "McGrady", "age": 44 },
-        { "id": "23", "firstName": "Lebron", "age": 39 },
-        { "id": "24", "firstName": "Kobe", "age": 45 },
+        { "id": "1", "firstName": "McGrady", "age": 44, "companyId": "1" },
+        { "id": "23", "firstName": "Lebron", "age": 39, "companyId": "2" },
+        { "id": "24", "firstName": "Kobe", "age": 45, "companyId": "1" },
         { "id": "34", "firstName": "Shaquille", "age": 51 }
+    ],
+    "companies": [
+        { "id": "1", "name": "Leica Geosystems", "description": "civil engineering" },
+        { "id": "2", "name": "Apple", "description": "Iphone" }
     ]
 }
