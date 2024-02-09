@@ -8,6 +8,22 @@
  } = graphql; // this is just destructing methods from graphql lib
  const axios = require('axios')
 
+ //IT IS IMPORTANT to define company type above the UserType!
+ const CompanyType = new GraphQLObjectType({
+    name:'Company',
+    fields: {
+        id: {type: GraphQLString},
+        name:{type: GraphQLString},
+        description:{type: GraphQLString}
+    }
+ });
+
+ /*
+ in graphQL, the link between two types are exactly done by including as field
+ so user should have a field called company which is of type CompanyType
+ */
+
+
  // userType is object that instructs graphql what kind of user object should be
  const UserType = new GraphQLObjectType({
     name: 'User', // this is the name for this type, here since it is UserType name obviously would be User
@@ -15,6 +31,7 @@
         id: {type: GraphQLString},
         firstName:{type: GraphQLString},
         age: {type: GraphQLInt},
+        company: {type: CompanyType}
     }
  });
 
