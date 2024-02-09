@@ -6,7 +6,7 @@
     GraphQLString,
     GraphQLSchema
  } = graphql; // this is just destructing methods from graphql lib
- const _ = require('lodash');
+ const axios = require('axios')
 
  // userType is object that instructs graphql what kind of user object should be
  const UserType = new GraphQLObjectType({
@@ -18,12 +18,6 @@
     }
  });
 
- // hard code data for now
- const users = [
-    { id: '2', firstName: 'OREN-ISHI', age: 30},
-    { id: '23', firstName: 'Bill', age: 20},
-    { id: '47', firstName: 'Samantha', age: 21}
- ]
 
  const RootQuery = new GraphQLObjectType({
     // translate: you can give root query asking about users, 
@@ -38,7 +32,10 @@
             // the resolve function will actually go into the Data Store / Database, 
             // and it finds the data
             resolve(parentValue, args){ // parentValue is something that is not going to be used
-              return _.find(users, {id: args.id}) // lodash search all users and return the user with id which is the passed id
+                // now we replaced this step with actual API call to our outside Data Store
+              return axios.get(`http://localhost:3000/users/${args.id}`)
+              .then(response => response.data); // Axios by default return something like this { data: { firstName:'Bill' }} object nested under data
+              // but GraphQL doesn't know it, thats why we need to return response.data
               // This is raw Javascript object, we don't have to define type here.
               // GraphQL handles the type automatically for us
             }
