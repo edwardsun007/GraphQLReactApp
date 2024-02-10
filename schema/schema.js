@@ -15,13 +15,13 @@
     fields: {
         id: {type: GraphQLString},
         name:{type: GraphQLString},
-        description:{type: GraphQLString}
-    },
-    users: {
-        type: new GraphQLList(UserType),
-        resolve(parentValue, args){ // look up will pass the companyId remember
-            return axios.get(`http://localhost:3000/companies/${parentValue.companyId}/users`)
-            .then(res=>res.data);
+        description:{type: GraphQLString},
+        users: {
+            type: new GraphQLList(UserType),
+            resolve(parentValue, args){ // look up will pass the companyId remember
+                return axios.get(`http://localhost:3000/companies/${parentValue.companyId}/users`)
+                .then(res=>res.data);
+            }
         }
     }
  });
