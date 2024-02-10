@@ -4,7 +4,8 @@
     GraphQLObjectType,
     GraphQLInt,
     GraphQLString,
-    GraphQLSchema
+    GraphQLSchema,
+    GraphQLList
  } = graphql; // this is just destructing methods from graphql lib
  const axios = require('axios')
 
@@ -15,6 +16,13 @@
         id: {type: GraphQLString},
         name:{type: GraphQLString},
         description:{type: GraphQLString}
+    },
+    users: {
+        type: new GraphQLList(UserType),
+        resolve(parentValue, args){ // look up will pass the companyId remember
+            return axios.get(`http://localhost:3000/companies/${parentValue.companyId}/users`)
+            .then(res=>res.data);
+        }
     }
  });
 
@@ -22,7 +30,6 @@
  in graphQL, the link between two types are exactly done by including as field
  so user should have a field called company which is of type CompanyType
  */
-
 
  // userType is object that instructs graphql what kind of user object should be
  const UserType = new GraphQLObjectType({
@@ -65,7 +72,17 @@
               // This is raw Javascript object, we don't have to define type here.
               // GraphQL handles the type automatically for us
             }
+        },
+        // Adding a sibling field to user called company, this is going to be entry point for look up companies
+        company: {
+            type:CompanyType,
+            args: { id: {type: GraphQLString } }, // whenever lookup happens, it is expected that id is provided in the query
+            resolve(parentValue, args){
+                return axios.get(`http://localhost:3000/companies/${args.id}`)
+                .then(response => response.data);
+            }
         }
+
     }
  });
 
