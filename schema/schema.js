@@ -31,7 +31,16 @@
         id: {type: GraphQLString},
         firstName:{type: GraphQLString},
         age: {type: GraphQLInt},
-        company: {type: CompanyType}
+        company: {
+            type: CompanyType,
+    // On high level, resolve function is how we teach GraphQL to extract 
+            resolve(parentValue, args){ // by console.log find that parentValue is the actual user object stored in backend
+                // console.log('user type resolve checking parentValue.companyId:',parentValue.companyId)
+                // console.log('user type resolve checking args:',args)
+                return axios.get(`http://localhost:3000/companies/${parentValue.companyId}`)
+                .then(res=>res.data);
+            }
+        }
     }
  });
 
