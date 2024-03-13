@@ -110,9 +110,22 @@ const mutation = new GraphQLObjectType({
                 return axios.post(`http://localhost:3000/users`, { firstName, age })
                 .then( res => res.data);
             }
+        },
+        // all mutations object are object inside fields block
+        deleteUser: {
+            type: UserType,
+            args: {
+                userId: { type: new GraphQLNonNull(GraphQLString) }
+            },
+            resolve(parentValue, {userId}){
+                return axios.delete(`http://localhost:3000/users/${userId}`)
+                .then( res => res.data);
+            }
         }
     }
 });
+
+
 
 /**
  * create a new graphQLschema by calling new, and then export it as common js MODULE so that other piece of the app can access it
