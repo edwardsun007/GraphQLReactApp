@@ -121,7 +121,22 @@ const mutation = new GraphQLObjectType({
                 return axios.delete(`http://localhost:3000/users/${userId}`)
                 .then( res => res.data);
             }
+        },
+        // PATCH is really preferred over PUT because it only overwrites given fields while preserves others
+        editUser: {
+            type: UserType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLString) },
+                firstName:{type: GraphQLString},
+                age: {type: GraphQLInt},
+                companyId: { type: GraphQLString }
+            },
+            resolve(parentValue, args){
+                return axios.patch(`http://localhost:3000/users/${args.id}`, args)
+                .then( res => res.data);
+            }
         }
+
     }
 });
 
