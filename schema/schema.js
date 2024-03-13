@@ -12,18 +12,22 @@
  //IT IS IMPORTANT to define company type above the UserType!
  const CompanyType = new GraphQLObjectType({
     name:'Company',
-    fields: {
+    // The way to fix the circular reference issue is by using Javascript closure like below 
+    // fields now return a closure
+    // why it fix the isse ? -- before using closure, it is a object and it gets executed when this schema is defined.
+    // with closure, it is still defined when GraphQL schema is defined, but it is not executed until after this entire file is executed
+    fields: () => ({
         id: {type: GraphQLString},
         name:{type: GraphQLString},
         description:{type: GraphQLString},
         users: {
             type: new GraphQLList(UserType),
             resolve(parentValue, args){ // look up will pass the companyId remember
-                return axios.get(`http://localhost:3000/companies/${parentValue.companyId}/users`)
+                return axios.get(`http://localhost:3000/companies/${parentValue.id}/users`)
                 .then(res=>res.data);
             }
         }
-    }
+    })
  });
 
  /*
@@ -34,7 +38,9 @@
  // userType is object that instructs graphql what kind of user object should be
  const UserType = new GraphQLObjectType({
     name: 'User', // this is the name for this type, here since it is UserType name obviously would be User
-    fields: { // this block defines what properties the userType should have
+    // The way to fix the circular reference issue is by using Javascript closure like below 
+    // fields now return a closure
+    fields: () => ({ // this block defines what properties the userType should have
         id: {type: GraphQLString},
         firstName:{type: GraphQLString},
         age: {type: GraphQLInt},
@@ -48,7 +54,7 @@
                 .then(res=>res.data);
             }
         }
-    }
+    })
  });
 
 
