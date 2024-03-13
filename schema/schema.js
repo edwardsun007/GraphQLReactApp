@@ -5,7 +5,8 @@
     GraphQLInt,
     GraphQLString,
     GraphQLSchema,
-    GraphQLList
+    GraphQLList,
+    GraphQLNonNull
  } = graphql; // this is just destructing methods from graphql lib
  const axios = require('axios')
 
@@ -92,9 +93,31 @@
     }
  });
 
+
+const mutation = new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+        // to add a user to collection of users
+        addUser: {
+            type: UserType,
+            args: { // what is required for creating a new user
+                // they must provide not nULL firstName and AGE
+                firstName: { type: new GraphQLNonNull(GraphQLString) }, 
+                age: { type: new GraphQLNonNull(GraphQLInt) },
+                companyId: { type: GraphQLString }
+            },
+            resolve(parentValue, {firstName, age}){
+                return axios.post(`http://localhost:3000/users`, { firstName, age })
+                .then( res => res.data);
+            }
+        }
+    }
+});
+
 /**
  * create a new graphQLschema by calling new, and then export it as common js MODULE so that other piece of the app can access it
  */ 
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation: mutation
 });
